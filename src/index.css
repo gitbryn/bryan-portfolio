@@ -1,0 +1,191 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   QualityLab design tokens. Components use the Tailwind names in @theme below.
+   --------------------------------------------------------------------------- */
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0b111b;
+  --bg-2: #0f1722;
+  --surface: #131d2a;
+  --surface-2: #182434;
+  --border: #283747;
+  --border-soft: #1d2a39;
+  --text: #f1f5fa;
+  --muted: #a5b3c4;
+  --subtle: #8394a8;
+  --accent: #54d6c7;
+  --accent-strong: #7be3d7;
+  --accent-soft: rgb(84 214 199 / 0.1);
+  --accent-line: rgb(84 214 199 / 0.4);
+  --on-accent: #052520;
+  --explore: #f2c46d;
+  --explore-soft: rgb(242 196 109 / 0.1);
+  --explore-line: rgb(242 196 109 / 0.35);
+  --grid-line: rgb(165 179 196 / 0.06);
+  --shadow: 0 1px 0 rgb(255 255 255 / 0.03) inset, 0 20px 40px -24px rgb(0 0 0 / 0.6);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f5f8fb;
+  --bg-2: #eef3f7;
+  --surface: #ffffff;
+  --surface-2: #f3f6fa;
+  --border: #d6dee8;
+  --border-soft: #e4eaf1;
+  --text: #0e1623;
+  --muted: #47566a;
+  --subtle: #5b6a7e;
+  --accent: #0b7f72;
+  --accent-strong: #08665c;
+  --accent-soft: rgb(11 127 114 / 0.08);
+  --accent-line: rgb(11 127 114 / 0.35);
+  --on-accent: #ffffff;
+  --explore: #8a5a00;
+  --explore-soft: rgb(176 120 0 / 0.08);
+  --explore-line: rgb(176 120 0 / 0.35);
+  --grid-line: rgb(14 22 35 / 0.05);
+  --shadow: 0 20px 40px -28px rgb(14 22 35 / 0.25);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--border);
+  --color-line-soft: var(--border-soft);
+  --color-fg: var(--text);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-line: var(--accent-line);
+  --color-on-accent: var(--on-accent);
+  --color-explore: var(--explore);
+  --color-explore-soft: var(--explore-soft);
+  --color-explore-line: var(--explore-line);
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Manrope', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', Consolas, monospace;
+  --shadow-card: var(--shadow);
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--accent-line);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------------------
+   Patterns
+   --------------------------------------------------------------------------- */
+.grid-pattern {
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 75%);
+}
+
+.hero-halo {
+  background: radial-gradient(45% 55% at 75% 35%, var(--accent-soft), transparent 70%);
+}
+
+/* ---------------------------------------------------------------------------
+   Motion
+   --------------------------------------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal[data-visible='true'] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Hero pipeline: a dot travelling along the connector path. */
+.pipeline-dot {
+  display: none;
+}
+
+@supports (offset-path: path('M0 0')) {
+  .pipeline-dot {
+    display: block;
+    offset-path: path('M105 68 H355 V198 H105 V328 H230');
+    offset-rotate: 0deg;
+    animation: pipeline-travel 9s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+}
+
+@keyframes pipeline-travel {
+  from {
+    offset-distance: 0%;
+  }
+  to {
+    offset-distance: 100%;
+  }
+}
+
+.pipeline-flow {
+  stroke-dasharray: 4 6;
+  animation: pipeline-dash 1.6s linear infinite;
+}
+
+@keyframes pipeline-dash {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .pipeline-dot,
+  .pipeline-flow {
+    animation: none;
+  }
+  .pipeline-dot {
+    display: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
