@@ -106,9 +106,9 @@ export const profile: Profile = {
   about: {
     heading: 'From hands-on testing to leading quality.',
     paragraphs: [
-      'I started as a Junior Software Quality Assurance Engineer — executing manual tests, writing test cases, and documenting defects across web and mobile applications. That hands-on foundation still shapes how I work.',
-      'As a QA Team Lead, I oversee quality assurance activities across multiple projects, ensuring that test planning, test design, execution, and documentation align with established QA standards. My responsibilities include reviewing testing deliverables, monitoring test coverage and defect resolution, guiding QA team members, and supporting release readiness and sign-off. Alongside these leadership responsibilities, I remain actively involved in hands-on testing and continuous QA process improvement.',
-      "I work closely with developers and project teams to surface risks early and communicate blockers clearly. I'm currently exploring test automation and AI-assisted QA workflows to make repeatable checks faster and more dependable.",
+      'I started my career as a Junior Software Quality Assurance Engineer, gaining hands-on experience in manual testing, test case design, and defect identification and reporting across web and mobile applications. That foundation continues to shape my approach to software quality today.',
+      'Now, as a QA Team Lead, I oversee quality assurance activities across multiple projects, ensuring that test planning, test design, execution, and documentation align with established QA standards. My responsibilities include reviewing QA deliverables, monitoring test coverage and defect resolution, mentoring team members, and supporting release readiness and sign-off. Beyond these leadership responsibilities, I remain actively involved in hands-on testing, technical problem-solving, and continuous QA process improvement.',
+      "I collaborate closely with developers, project managers, and other stakeholders to identify risks early, address testing blockers, and maintain clear communication throughout the software development lifecycle. I'm also expanding my expertise in test automation and AI-assisted QA workflows, exploring ways to make testing more efficient, repeatable, and reliable.",
     ],
     highlights: [
       {
