@@ -148,6 +148,61 @@ test('projects grid matches src/data/projects.ts', async ({ page }) => {
   }
 });
 
+test('featured projects are listed first', async ({ page }) => {
+  test.skip(!projects.some((p) => p.featured), 'no featured project');
+  const firstCard = page.locator('#projects').getByRole('article').first();
+  await expect(firstCard.getByText('Featured')).toBeVisible();
+  await expect(firstCard.getByRole('heading', { level: 3 })).toHaveText(projects.find((p) => p.featured)!.title);
+});
+
+test('every project image path loads', async ({ request }) => {
+  const paths = projects.flatMap((p) => [p.thumbnail?.src, ...(p.caseStudy?.screenshots ?? []).map((s) => s.src)]);
+  for (const src of paths.filter((x): x is string => Boolean(x))) {
+    const res = await request.get(src);
+    expect(res.status(), src).toBe(200);
+    expect(res.headers()['content-type'], src).toMatch(/^image\//);
+  }
+});
+
+test('case-study images render and have alt text', async ({ page }) => {
+  for (const p of projects) {
+    await page.goto(`/#/projects/${encodeURIComponent(p.slug)}`);
+    const images = page.locator('main img');
+    const count = await images.count();
+    for (let i = 0; i < count; i++) {
+      const img = images.nth(i);
+      await img.scrollIntoViewIfNeeded();
+      await expect(img).toHaveAttribute('alt', /\S/);
+      await expect.poll(() => img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
+    }
+  }
+});
+
+test('case-study page has no horizontal overflow', async ({ page }) => {
+  for (const p of projects) {
+    await page.goto(`/#/projects/${encodeURIComponent(p.slug)}`);
+    await scrollThrough(page);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBe(0);
+  }
+});
+
+test.describe('case-study contents', () => {
+  test.skip(({ viewport }) => (viewport?.width ?? 0) < 1024, 'the contents sidebar is shown from 1024px');
+
+  test('sidebar scrolls to a section without changing the route', async ({ page }) => {
+    test.skip(projects.length === 0, 'no projects published yet');
+    const p = projects[0];
+    await page.goto(`/#/projects/${encodeURIComponent(p.slug)}`);
+    const toc = page.getByRole('navigation', { name: 'On this page' });
+    const last = toc.getByRole('button').last();
+    const label = (await last.textContent())!.trim();
+    await last.click();
+    await expect(page).toHaveURL(new RegExp(`#/projects/${encodeURIComponent(p.slug)}$`));
+    await expect(page.getByRole('heading', { level: 2, name: new RegExp(label) })).toBeInViewport();
+    await expect(last).toHaveAttribute('aria-current', 'location');
+  });
+});
+
 test('each project detail page opens and returns to the Projects section', async ({ page }) => {
   test.skip(projects.length === 0, 'no projects published yet');
   for (const p of projects) {
@@ -160,11 +215,27 @@ test('each project detail page opens and returns to the Projects section', async
     await expect(page).toHaveTitle(`${p.title} | Bryan Laserna`);
     await expect(page.locator('#home')).toHaveCount(0);
 
-    // Only sections with real content are rendered.
-    const d = p.details ?? {};
-    const shown = await page.locator('main h2').allTextContents();
-    expect(shown.some((t) => t.includes('Project Overview'))).toBe(Boolean(d.overview));
-    expect(shown.some((t) => t.includes('Future Improvements'))).toBe(Boolean(d.futureImprovements?.length));
+    // Exactly the case-study sections that have content are rendered, in order.
+    const c = p.caseStudy ?? {};
+    const expected = [
+      ['Overview', c.overview?.length],
+      ['The Problem', c.problem?.length],
+      ['The Approach', c.approach?.length],
+      ['See It Working', c.screenshots?.length],
+      ['How It Works', c.howItWorks?.length],
+      ['Core Features', c.features?.length],
+      ['What It Offers QA Testers', c.forTesters?.length],
+      ['Technical Architecture', c.architecture],
+      ['Engineering Challenges and Decisions', c.decisions?.length],
+      ['Testing and Verification', c.testing],
+      ['Lessons Learned', c.lessons?.length],
+      ['Current Status and Roadmap', c.status],
+      ['Project Availability', c.availability?.length],
+    ]
+      .filter(([, present]) => Boolean(present))
+      .map(([title]) => title);
+    const shown = (await page.locator('main section > h2').allTextContents()).map((t) => t.replace(/^\d+/, ''));
+    expect(shown).toEqual(expected);
 
     await page.getByRole('link', { name: 'Back to Projects' }).first().click();
     await expect(page).toHaveURL(/#projects$/);

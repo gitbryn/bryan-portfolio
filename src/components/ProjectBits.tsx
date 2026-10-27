@@ -1,7 +1,8 @@
-import { Bot, Box, Globe, ShieldCheck, Smartphone, Webhook, type LucideIcon, type LucideProps } from 'lucide-react';
+import { Bot, Box, Globe, MonitorCog, ShieldCheck, Smartphone, Star, Webhook, type LucideIcon, type LucideProps } from 'lucide-react';
 import { projectStatusLabel, type Project, type ProjectStatus } from '../data/projects';
 
 const categoryIcons: Record<string, LucideIcon> = {
+  'Desktop QA Automation Tool': MonitorCog,
   'QA Tool': ShieldCheck,
   Automation: Bot,
   'API Testing': Webhook,
@@ -28,6 +29,15 @@ export function StatusBadge({ status }: { status: ProjectStatus }) {
     >
       <span className={`size-1.5 rounded-full motion-reduce:animate-none ${s.dot}`} aria-hidden="true" />
       {projectStatusLabel[status]}
+    </span>
+  );
+}
+
+export function FeaturedBadge() {
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-accent-line bg-accent px-2.5 py-0.5 font-mono text-[10.5px] font-semibold tracking-wider text-on-accent uppercase">
+      <Star className="size-3" fill="currentColor" aria-hidden="true" />
+      Featured
     </span>
   );
 }
@@ -63,6 +73,8 @@ export function ProjectThumbnail({ project, className = '' }: { project: Project
       <img
         src={project.thumbnail.src}
         alt={project.thumbnail.alt}
+        width={project.thumbnail.width}
+        height={project.thumbnail.height}
         loading="lazy"
         className={`aspect-[16/9] w-full object-cover ${className}`}
       />

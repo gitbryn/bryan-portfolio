@@ -56,38 +56,41 @@ Anything left `null` is **not shown**. The site never displays placeholder links
 
 ### Adding a project
 
-Projects live in **`src/data/projects.ts`**. Adding one object to the `projects` list creates both the card in the Projects & Tools grid and its detail page. You don't need to touch any component. While the list is empty, the section shows a "Projects are being prepared" message.
+Projects live in **`src/data/projects.ts`**. Adding one object to the list creates both the card in the Projects & Tools grid and its case-study page at `#/projects/<slug>`. You don't need to touch any component. VeriQA Studio in that file is a complete example.
 
 ```ts
-export const projects: Project[] = [
-  {
-    slug: 'api-contract-checker',          // unique, used in the URL: #/projects/api-contract-checker
-    title: 'API Contract Checker',
-    category: 'API Testing',               // QA Tool | Automation | API Testing | Web Application | Mobile Application | any text
-    status: 'in-development',              // 'in-development' | 'completed' | 'live'
-    description: 'One or two sentences shown on the card.',
-    technologies: ['Python', 'Postman'],
-    thumbnail: { src: '/projects/api-checker.png', alt: 'Results screen' }, // optional, file in public/projects/
-    links: { github: 'https://github.com/…', demo: 'https://…' },          // optional, https only
-    details: {                             // optional; sections without content are hidden
-      role: 'Solo developer',
-      timeline: 'Mar 2026 — present',
-      overview: '…',
-      problem: '…',
-      solution: '…',
-      features: ['…'],
-      screenshots: [{ src: '/projects/api-checker-2.png', alt: '…', caption: '…' }],
-      architecture: { summary: '…', steps: ['…'] },
-      testing: { summary: '…', items: ['…'] },
-      challenges: ['…'],
-      lessons: ['…'],
-      futureImprovements: ['…'],
-    },
+{
+  slug: 'my-tool',                      // unique, used in the URL
+  title: 'My Tool',
+  category: 'QA Tool',                  // Desktop QA Automation Tool | QA Tool | Automation | API Testing | … or any text
+  status: 'in-development',             // 'in-development' | 'completed' | 'live'
+  featured: true,                       // optional: listed first, shown as a wide card
+  description: 'One or two sentences shown on the card and the page hero.',
+  technologies: ['TypeScript', 'Playwright'],
+  thumbnail: { src: '/projects/my-tool/main.png', alt: '…', width: 1366, height: 768 },
+  links: { github: 'https://github.com/…', demo: 'https://…' },   // optional, https only
+  caseStudy: {                          // optional; every section is optional and hidden when empty
+    facts: [{ label: 'Version', value: '1.0' }],
+    overview: ['paragraph', '…'],
+    problem: ['…'],
+    approach: ['…'],
+    screenshots: [{ src: '/projects/my-tool/flow.png', alt: '…', caption: '…', width: 1366, height: 768 }],
+    howItWorks: [{ title: 'Record', description: '…' }],
+    features: [{ title: 'Recording', items: ['…'] }],
+    forTesters: [{ title: '…', description: '…' }],
+    architecture: { summary: '…', nodes: [{ name: '…', tech: '…', points: ['…'] }], links: ['…'], notes: ['…'] },
+    decisions: [{ title: '…', challenge: '…', decision: '…' }],
+    testing: { summary: '…', results: [{ suite: 'Unit', scope: '…', result: '10 / 10 passed', version: '1.0' }], notAutomated: ['…'] },
+    lessons: ['…'],
+    status: { summary: '…', verified: ['…'], awaitingManual: ['…'], planned: ['…'], limitations: ['…'] },
+    availability: ['…'],
   },
-];
+}
 ```
 
-Without a `thumbnail`, the card shows a plain panel with the category icon rather than a fake screenshot.
+- **Images:** put them in `public/projects/<slug>/`. Include `width` and `height` (the image's real pixel size) so the page doesn't jump while images load.
+- **Screenshots:** use real screenshots only. Without a `thumbnail`, the card shows a plain panel with the category icon.
+- **Empty list:** while there are no projects, the section shows a "Projects are being prepared" message.
 
 ## Project structure
 

@@ -2,7 +2,7 @@ import { ArrowRight, Code, ExternalLink, Hammer } from 'lucide-react';
 import { projects, type Project } from '../data/projects';
 import { httpsUrl } from '../lib/links';
 import { projectHref } from '../lib/routes';
-import { CategoryLabel, ProjectThumbnail, StatusBadge, TechBadges } from '../components/ProjectBits';
+import { CategoryLabel, FeaturedBadge, ProjectThumbnail, StatusBadge, TechBadges } from '../components/ProjectBits';
 import { Reveal } from '../components/Reveal';
 import { SectionHeading } from '../components/SectionHeading';
 
@@ -10,17 +10,34 @@ function ProjectCard({ project }: { project: Project }) {
   const github = httpsUrl(project.links?.github);
   const demo = httpsUrl(project.links?.demo);
   const detailHref = projectHref(project.slug);
+  // Featured: image beside the text on large screens; stacked elsewhere.
+  const wide = project.featured;
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card transition-[transform,border-color] duration-300 hover:-translate-y-1 hover:border-accent-line">
-      <a href={detailHref} tabIndex={-1} aria-hidden="true" className="block overflow-hidden border-b border-line">
-        <ProjectThumbnail project={project} className="transition-transform duration-500 group-hover:scale-[1.02]" />
+    <article
+      className={`group flex h-full flex-col overflow-hidden rounded-2xl border bg-surface shadow-card transition-[transform,border-color] duration-300 hover:-translate-y-1 hover:border-accent-line ${
+        wide ? 'border-accent-line lg:grid lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]' : 'border-line'
+      }`}
+    >
+      <a
+        href={detailHref}
+        tabIndex={-1}
+        aria-hidden="true"
+        className={`block overflow-hidden border-line ${wide ? 'border-b lg:border-r lg:border-b-0' : 'border-b'}`}
+      >
+        <ProjectThumbnail
+          project={project}
+          className={`object-left-top transition-transform duration-500 group-hover:scale-[1.02] ${wide ? 'lg:h-full' : ''}`}
+        />
       </a>
-      <div className="flex flex-1 flex-col p-6">
+      <div className={`flex flex-1 flex-col ${wide ? 'p-6 sm:p-8' : 'p-6'}`}>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <CategoryLabel category={project.category} />
-          <StatusBadge status={project.status} />
+          <span className="flex flex-wrap items-center gap-2">
+            {project.featured && <FeaturedBadge />}
+            <StatusBadge status={project.status} />
+          </span>
         </div>
-        <h3 className="mt-4 font-display text-xl font-bold tracking-tight text-fg">
+        <h3 className={`mt-4 font-display font-bold tracking-tight text-fg ${wide ? 'text-2xl sm:text-[1.7rem]' : 'text-xl'}`}>
           <a href={detailHref} className="hover:text-accent">
             {project.title}
           </a>
@@ -91,7 +108,7 @@ export function Projects() {
         ) : (
           <ul className="grid gap-6 md:grid-cols-2">
             {projects.map((p, i) => (
-              <Reveal as="li" key={p.slug} delay={(i % 2) * 90}>
+              <Reveal as="li" key={p.slug} delay={(i % 2) * 90} className={p.featured ? 'md:col-span-2' : ''}>
                 <ProjectCard project={p} />
               </Reveal>
             ))}
