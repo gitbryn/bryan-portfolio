@@ -224,7 +224,7 @@ test('each project detail page opens and returns to the Projects section', async
       ['See It Working', c.screenshots?.length],
       ['How It Works', c.howItWorks?.length],
       ['Core Features', c.features?.length],
-      ['What It Offers QA Testers', c.forTesters?.length],
+      ['What It Offers to QA Testers', c.forTesters?.length],
       ['Technical Architecture', c.architecture],
       ['Engineering Challenges and Decisions', c.decisions?.length],
       ['Testing and Verification', c.testing],

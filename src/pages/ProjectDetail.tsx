@@ -350,7 +350,7 @@ function buildSections(project: Project): Section[] {
   add('screenshots', 'See It Working', has(c.screenshots), () => <Screenshots shots={c.screenshots!} />);
   add('how', 'How It Works', has(c.howItWorks), () => <HowItWorks stages={c.howItWorks!} />);
   add('features', 'Core Features', has(c.features), () => <Features groups={c.features!} />);
-  add('testers', 'What It Offers QA Testers', has(c.forTesters), () => <ForTesters items={c.forTesters!} />);
+  add('testers', 'What It Offers to QA Testers', has(c.forTesters), () => <ForTesters items={c.forTesters!} />);
   add(
     'architecture',
     'Technical Architecture',

@@ -107,7 +107,7 @@ export const profile: Profile = {
     heading: 'From hands-on testing to leading quality.',
     paragraphs: [
       'I started as a Junior Software Quality Assurance Engineer — executing manual tests, writing test cases, and documenting defects across web and mobile applications. That hands-on foundation still shapes how I work.',
-      'As a QA Team Lead, I coordinate testing across multiple projects, review test scripts, support release sign-off, and keep QA documentation and standards consistent, while staying close to the testing itself.',
+      'As a QA Team Lead, I oversee quality assurance activities across multiple projects, ensuring that test planning, test design, execution, and documentation align with established QA standards. My responsibilities include reviewing testing deliverables, monitoring test coverage and defect resolution, guiding QA team members, and supporting release readiness and sign-off. Alongside these leadership responsibilities, I remain actively involved in hands-on testing and continuous QA process improvement.',
       "I work closely with developers and project teams to surface risks early and communicate blockers clearly. I'm currently exploring test automation and AI-assisted QA workflows to make repeatable checks faster and more dependable.",
     ],
     highlights: [

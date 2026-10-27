@@ -44,7 +44,7 @@ export interface CaseStudy {
   howItWorks?: { title: string; description: string }[];
   /** 6. Core Features — grouped lists. */
   features?: { title: string; items: string[] }[];
-  /** 7. What It Offers QA Testers. */
+  /** 7. What It Offers to QA Testers. */
   forTesters?: { title: string; description: string }[];
   /** 8. Technical Architecture — nodes are drawn left to right, joined by `links`. */
   architecture?: {
